@@ -1,0 +1,127 @@
+* { 
+    margin: 0px;
+    padding: 0px;
+}
+
+.dashboard{
+    background: url(../images/Minnesota-Made-bg.jpg) no-repeat;
+    background-size: cover;
+    background-position: center center;
+    padding: 20px;
+}
+
+.employee-login-blk {
+    display: flex;
+    background-color: black;
+    border: 3px solid #2F3031;
+    border-radius: 2%;
+    box-shadow: 2px 1px 1px black;
+    color: white;
+    margin: 5px;
+}
+
+.active-employees-section {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.active-employees-section h5 {
+    color: white;
+}
+
+.table-bordered {
+    width: 75%;
+}
+
+.active-employees-section table {
+    display: table;
+    justify-content: center;
+    border-radius: 2%;
+    margin-top: 10%;
+    background-color: white;
+    text-align: left;
+}
+
+.active-employees-section thead {
+    background-color: gray;
+    color: black;
+    padding: 5px;
+}
+
+.active-employees-section th{
+    padding: 5px;
+}
+
+.special-links-container {
+    margin-top: 10%;
+}
+
+.special-links {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.clock-in-out-system {
+    display: inline-block;
+    justify-content: center;
+    text-align: center;
+    margin-top: 10%;
+}
+
+.clock {
+    display: inline-block;
+    justify-content: center;
+    font-size: 2em;
+    text-align: center;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: gray;
+    border-radius: 8px;
+    padding: 20px;
+    width: 500px;
+    margin-bottom: 10px;
+}
+
+.clock div {
+    font-size: 0.5em;  
+}
+
+.clock span {
+    margin: 5px;
+}
+
+.clock .time {
+    display: inline-block;
+    justify-content: center;
+    text-align: center;
+    background-color: white;
+    border-radius: 8px;
+    width: 40%;
+}
+
+.employee-form {
+    background-color: gray;
+    border-radius: 8px;
+    width: 100%;
+    padding: 20px;
+}
+
+.employee-form .row {
+    display: inline-block;
+    justify-content: center;
+    text-align: center;
+}
+
+.employee-form .row button {
+    margin: 5px;
+    margin-top: 20px;
+}
+
+.error-msg-block {
+    display: inline-block;
+    justify-content: flex-start;
+    color: red;
+}
+

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MN Made - Employee Dashboard</title>
+    {% load static %}
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <Link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+    <div class="clock-page">
+
+        <!-- 
+        ==================
+        NAVIGATION SECTION
+        ================== 
+        -->
+        <nav class="navbar navbar-dark bg-dark">
+            <a href="/admin">Admin Login</a>
+            <a href="/logout">Logout</a>
+        </nav>
+
+
+        <!-- 
+        ====================
+        CLOCK SYSTEM SECTION
+        ====================
+        -->
+        <div class="container text-center">
+            <section class="clock-in-out-system">
+                <!-- CLOCK -->
+                <div class="clock"></div>
+
+                <!-- employee form -->
+                <div class="employee-form">
+                    <form method="POST" action="/process-clock">
+                        {% csrf_token %}
+                        <label for="employee">Staff</label>
+                        <select class="form-control" name="employee_id">
+                            <option disabled selected>- Select -</option>
+                            {% for employee in all_employees %}
+                                <option name="employee" value="{{employee.id}}">{{employee.last_name}}, {{employee.first_name}}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <label for="comment">Comment</label>
+                        <textarea class="form-control" name="comment"></textarea>
+                        <div class="row">
+                            <button class="btn btn-success" type="submit" value="clockin" name="clocksys">Clock In</button>
+                            <button class="btn btn-danger" type="submit" value="clockout" name="clocksys">Clock Out</button>
+                        </div>
+
+                    </form>
+                </div>
+            </section>
+        </div>
+
+        
+    </div>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="http://cdn.date-fns.org/v1.9.0/date_fns.min.js"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

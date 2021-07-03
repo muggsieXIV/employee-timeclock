@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MN Made - Employee Dashboard</title>
+    {% load static %}
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <Link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar navbar-light bg-light justify-content-between">
+            <a href="/admin">Admin Login</a>
+        </nav>
+        <!-- CLOCK -->
+        <div class="clock"></div>
+        <div class="row mt-5">
+            <div class="col-sm-3 col-lg-3">
+                <!-- Employee Clock IN -->
+                <div class="employee-login-blk">
+                    <div class="clock-in">
+                        <h3>Clock In</h3>
+                        <form action="/clock-in" method="POST" class="form-group">
+                            {% csrf_token %}
+                            <label for="employee">Employee</label>
+                            <select class="form-control" name="employee">
+                                {% for employee in all_employees %}
+                                    <option value="{{employee.id}}">{{ employee.first_name }} {{ employee.last_name }}</option>
+                                {% endfor %}
+                            </select>
+                            <br>
+                            <label for="location">Location</label>
+                            <select class="form-control" name="location">
+                                <option class="mn-made">Minnesota Made</option>
+                                <option class="slp">SLP</option>
+                                <option value="first-athlete">First Athlete</option>
+                            </select>
+                            <br>
+                            <label for="role">Role</label>
+                            <select class="form-control" name="role">
+                                <option value="maintaince">Maintaince</option>
+                                <option value="coach">Coach</option>
+                                <option value="concessions">Concessions</option>
+                                <option value="office">Office</option>
+                                <option value="trainer">Trainer</option>
+                            </select>
+                            <br>
+                            <button class="btn btn-success form-control">Clock in</button>
+                            <div class="error-messages">
+                                {% if messages %}
+                                    <ul>
+                                        {% for message in messages %}
+                                            <li>{{ message }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9 col-lg-9 active-employees-section text-center">
+                <h5>Active Employees</h5>
+                <table class="table-bordered">
+                    <thead>
+                        <th>Status</th>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Role</th>
+                        <th></th>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Active</td>
+                            <td>Izzie Walker</td>
+                            <td>MN Made</td>
+                            <td>Concessions</td>
+                            <td><a href="/clock-out" class="btn btn-danger">Clock Out</a></td>
+                            <td><a href="/report-error" class="btn btn-warning">Report Error</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="container special-links-container">
+                <div class="special-links">
+                    <a target="_blank" href="http://minnesotamadehockey.pointstreaksites.com/view/mmha/home-page-657/" class="btn btn-primary m-2">Minnesota Made Website</a>
+                    <a href="" class="btn btn-dark m-2">Mn Made Rink Schedule</a>
+                    <a href="" class="btn btn-info m-2">First Athlete Schedule</a>
+                    <a href="" class="btn btn-light m-2">SLP Rink Schedule</a>
+                    <a href="" class="btn btn-warning m-2">SLP Gym Schedule</a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
