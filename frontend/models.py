@@ -121,7 +121,12 @@ class ClockSystemManager(models.Manager):
     def clockin_validator(self, form_data):
         errors = {}
         if len(form_data['comment']) == 1:
-            errors['comment'] = "Please use the comment section to let us know of an issue, or error. You may also completment Todd on his looks."
+            errors['comment'] = "Please be descriptive if there is an issue."
+        return errors
+    def clockout_validator(self, form_data):
+        errors = {}
+        if len(form_data['comment']) == 1:
+            errors['comment'] = "Please be descriptive if there is an issue."
         return errors
 
 
@@ -135,6 +140,7 @@ class ClockSystem(models.Model):
     date_worked=models.DateField(null=True)
     clocked_in_at=models.TimeField()
     clocked_out_at=models.TimeField(null=True)
+    objects=ClockSystemManager()
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
 

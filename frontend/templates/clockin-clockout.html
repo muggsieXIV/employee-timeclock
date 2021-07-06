@@ -19,7 +19,7 @@
         ================== 
         -->
         <nav class="navbar navbar-dark bg-dark">
-            <a href="/admin">Admin Login</a>
+            <a href="/admin" target="_blank">Admin Login</a>
             <a href="/logout">Logout</a>
         </nav>
 
@@ -39,10 +39,10 @@
                     <form method="POST" action="/process-clock">
                         {% csrf_token %}
                         <label for="employee">Staff</label>
-                        <select class="form-control" name="employee_id">
+                        <select class="form-control" name="employee">
                             <option disabled selected>- Select -</option>
                             {% for employee in all_employees %}
-                                <option name="employee" value="{{employee.id}}">{{employee.last_name}}, {{employee.first_name}}</option>
+                                <option value="{{employee.id}}">{{employee.last_name}}, {{employee.first_name}}</option>
                             {% endfor %}
                         </select>
                         <br>
