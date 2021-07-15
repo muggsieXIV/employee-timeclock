@@ -23,10 +23,10 @@ def process_register(request):
         # check if registration object is valid
         # import list of errors found
         errors = User.objects.user_validator(request.POST)
-        if len(errors) > 0:
-            for message in errors.values():
-                message.errors(request, message)
-            return redirect('/')
+        # if len(errors) > 0:
+        #     for message in errors.values():
+        #         message.errors(request, message)
+        #     return redirect('/')
         
         # add the error messages to each error if any errors found in the
         # errors list - checks if list is empty or not - uses python message
@@ -127,16 +127,15 @@ def dashboard(request):
     # check active_employees in session is current
     context = {
         'all_employees': Employee.objects.all(),
-        'active_employees': []
     }
-    for employee in context['all_employees']:
-        if employee.is_active == True:
-            context['active_employees'] += employee.id
+    #### TODO: Add active employees to the request.session
     return render(request, 'clockin-clockout.html', context)
         
 
+
 # Clock in and Clock out function
 def process_clock(request):
+
     # if User is not in request.session -> redirect to login
     if 'user_id' not in request.session:
         return redirect('/')
@@ -148,76 +147,142 @@ def process_clock(request):
             message.errors(request, message)
             print('errors: ' + message.errors(request, message))
         return redirect('/dashboard')
+    
+    # Define the employee
+    e = Employee.objects.get(id=request.POST['employee'])
 
     # Get the employee 
-    employee = request.POST['employee']
-    print('employee clocking in: ' + employee)
-
-    e = Employee.objects.get(id=request.POST['employee'])
-    print(e)
-    # print(e.firstname + ' is now active: ' + e.is_active)
+    print('Clock system initiated by: ' + e.last_name + ', ' + e.first_name)
+    now = datetime.datetime.now()
+    print('Current Time: ' + str(now))
+    print('Clock system requested: ' + request.POST['clocksys'])
 
     ############
     # if clocking in
     if request.POST['clocksys'] == "clockin":
-        print("Clock in initiated for: " + e.last_name + ', ' + e.first_name)
-        # if e.id in request.session['active_employees']:
-        #     message.error(request, e.last_name + ", " + e.first_name + " is already clocked in")
-        #     return redirect('/dashboard')
-        if e.is_active == True:
-            message.error(request, 'failed: ' + e.last_name + ', ' + e.first_name  + ' is already clocked in')
-            print('failed: ' + e.last_name + ', ' + e.first_name  + ' is already clocked in')
-            return redirect('/dashboard')
 
-        now = datetime.datetime.now()
+        print("Clock in initiated for: " + e.last_name + ', ' + e.first_name)
+
+        if e.is_active == True:
+            # message.error(request, 'failed: ' + e.last_name + ', ' + e.first_name  + ' is already clocked in')
+            print('failed: ' + e.last_name + ', ' + e.first_name  + ' is already active')
+            return redirect('/dashboard')
 
         ClockSystem.objects.create(
             employee=e,
-            comment=request.POST['comment'],
-            date_worked=now.strftime("%Y-%m-%d"),
+            in_comment=request.POST['comment'], 
+            date_in=now.strftime("%Y-%m-%d"),
             clocked_in_at=now.strftime("%H:%M:%S")
         )
+        
+        print('Updating Employee Status...')
         e.is_active = True
-        print('Employee: ' + e.last_name + ', ' + e.first_name + ' active status: ' + str(e.is_active))
-        message.error(request, e.last_name + ', ' + e.first_name + " was successfully signed in!")
+
+        print('Checking Employee Status...')
+        if e.is_active == False:
+            print('Failed to update Employee active status')
+        if e.is_active == True:
+            print('Employee: ' + e.last_name + ', ' + e.first_name + ' updated active status: ' + str(e.is_active))
+
         e.save()
-        print(str(e))
+        if e.is_active == True:
+            print('Employee active status successfully updated')
+        
+        print('Employee: ' + e.last_name + ', ' + e.first_name + ' active:' + str(e.is_active) + ' updated at:' + str(now))
         print(e)
-        print(e.last_name + ', ' + e.first_name + ' was succesfully signed in')
+        success = e.last_name + ', ' + e.first_name + ' was succesfully signed in'
+        print(success)
         return redirect('/dashboard')
 
     ##############  
     # if clocking out
     if request.POST['clocksys'] == 'clockout':
-        # check if employee object is valid
-        if len(e) == 0:
-            message.error(request, "Employee not found, try again")
-            return redirect('/dashboard')
-        
         # Check to make sure the employee is clocked in, and has not clocked out
-        if e.id not in request.session['active_employees']:
-            message.error(request, e.last_name + ", " + e.first_name + " is not signed in.")
-            redirect('/dashboard')
+        if e.is_active != True:
+            print('*** Failed: Employee ' + e.last_name + ', ' + e.first_name + ' is not clocked in. ***')
+            return redirect('/dashboard')
+        # If employee was clocked in: 
+        if e.is_active == True:
+            print('Employee current is_active status: ' + str(e.is_active))
+            print('Fetching last login for employee: ' + e.last_name + ', ' + e.first_name + ' ...')
+            # Get the employee's last clockin
+            cs = ClockSystem.objects.all()
+            e_cs = cs.filter(employee=request.POST['employee'])
+            last_login = e_cs[len(e_cs) - 1]
+            if last_login:
+                print("Last login for: " + e.last_name + ', ' + e.first_name + ' successfully loaded: True')
+                print("Employee: " + e.last_name + ', ' + e.first_name + ' clocked in at: ' + str(last_login.clocked_in_at))
+            
+            # Calculate hours_worked and update clock information. 
+            last_login.clocked_out_at = now.strftime("%H:%M:%S")
+            print("Employee: " + e.last_name + ", " + e.first_name + ", clocking out at: " + str(last_login.clocked_out_at))
+            
+            c_in = last_login.clocked_in_at
+            c_out = last_login.clocked_out_at
+            d_in = last_login.date_in
+            d_out = now.strftime("%Y-%m-%d")
 
-        # Get clockin from earlier
-        data = ClockSystem.objects.last()
-        
-        # set employee to inactive
-        e.is_active = False
-        # remove employee from session
-        request.session['active_employees'].pop(e.id)
+            print('*** Finding hours worked...')
+            print('In time: ' + str(c_in))
+            print('Out Time: ' + str(c_out))
+            print("Date in: " + str(d_in))
+            print("Date out: " + str(d_out))
 
-        now = datetime.datetime.now()
+            print(c_in)
+            print(c_out)
+            print(d_in)
+            print(d_out)
+            
+            datetime1_str = str(d_in) + ' ' + str(c_in)
+            print(datetime1_str)
+            datetime2_str = str(d_out) + ' ' + str(c_out)
+            print(datetime2_str)
 
-        data.clocked_out_at = now.strftime("%H:%M:%S")
-        # get hours
-        
-        # get minutes
-        
-        data.comment += request.POST['comment']
-        
-        message.error(request, e.last_name + ", " + e.first_name + " was successfully clocked out!")
-        return redirect('/dashboard')
+            datetimeFormat = '%Y-%m-%d %H:%M:%S'
+            diff = datetime.datetime.strptime(datetime2_str, datetimeFormat) - datetime.datetime.strptime(datetime1_str, datetimeFormat)
+
+            # print("Difference:", diff)
+            # print("Days:", diff.days)
+            # print("Microseconds:", diff.microseconds)
+            # print("Seconds:", diff.seconds)
+
+            last_login.time_worked = str(diff)
+            print("Clock-In / Clock-Out Time Difference: " + last_login.time_worked)
+
+            last_login.out_comment = request.POST['comment']
+            print("Employee: " + e.last_name + ', ' + e.first_name + ', Logging out comment: ' + last_login.out_comment)
+
+            last_login.date_out = d_out
+            print("Date logged out: " + str(last_login.date_out))
+            
+            # last_login.save()
+            print(e.last_name + ', ' + e.first_name + ' ' + last_login.time_worked + ' ' + last_login.in_comment + ' ' + last_login.out_comment)
+            # Set employe to inactive
+            e.is_active = False
+            # e.save()
+            print("Employee active status set: " + str(e.is_active))
+
+            last_login.save()
+            e.save()
+
+            return redirect('/dashboard')
+            
+    else:
+        print('Something went wrong. Please contact your admninistrator with code:303-B_FAIL')
+        return(redirect('/'))
 
 
+# Deletng clockSystem Data
+def process_remove_clocksys(request, clockSys_id):
+    if 'user_id' not in request.session:
+        return redirect('/')
+    clocksys_to_delete = ClockSystem.objects.get(id=clockSys_id)
+    clocksys_to_delete.delete()
+    return redirect('/dashboard')
 
+# def process_remove_employee(request, employee_id):
+#     if 'user_id' not in request.session:
+#         return redirect('/')
+#     emp_to_del = Employee.objects.get(id=employee_id)
+#     emp_to_del.delete()
+#     return redirect('/dashboard')

@@ -18,11 +18,20 @@
         NAVIGATION SECTION
         ================== 
         -->
-        <nav class="navbar navbar-dark bg-dark">
-            <a href="/admin" target="_blank">Admin Login</a>
-            <a href="/logout">Logout</a>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" href="/dashboard">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="/reports">Reports</a>
+                    <a class="nav-item nav-link" href="/admin">Admin</a>
+                    <a class="nav-item nav-link" href="/logout">Logout</a>
+                </div>
+            </div>
         </nav>
-
 
         <!-- 
         ====================
@@ -30,6 +39,11 @@
         ====================
         -->
         <div class="container text-center">
+            <div class="pt-5">
+                <!-- LOGO SECTION-->
+                <img src={% static  '../static/images/mnmade-logo1.png' %} className="" alt="Minnesota Made Hockey" />
+            </div>
+
             <section class="clock-in-out-system">
                 <!-- CLOCK -->
                 <div class="clock"></div>
@@ -38,7 +52,7 @@
                 <div class="employee-form">
                     <form method="POST" action="/process-clock">
                         {% csrf_token %}
-                        <label for="employee">Staff</label>
+                        <label for="employee">Employee</label>
                         <select class="form-control" name="employee">
                             <option disabled selected>- Select -</option>
                             {% for employee in all_employees %}
@@ -46,18 +60,27 @@
                             {% endfor %}
                         </select>
                         <br>
+                        
                         <label for="comment">Comment</label>
-                        <textarea class="form-control" name="comment"></textarea>
+                        <textarea class="form-control" name="comment" value="comment"></textarea>
                         <div class="row">
                             <button class="btn btn-success" type="submit" value="clockin" name="clocksys">Clock In</button>
                             <button class="btn btn-danger" type="submit" value="clockout" name="clocksys">Clock Out</button>
                         </div>
-
+                        {% if messages %}
+                            <ul>
+                                {% for message in messages %}
+                                    <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
                     </form>
                 </div>
             </section>
         </div>
-
+        <br>
+        
+        <p></p>
         
     </div>
     <!-- Latest compiled and minified JavaScript -->

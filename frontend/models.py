@@ -66,7 +66,6 @@ class UserManager(models.Manager):
 
         return errors
 
-
 class User(models.Model):
     # user information
     first_name = models.CharField(max_length=45)
@@ -80,6 +79,8 @@ class User(models.Model):
     # add for manager validator
     objects = UserManager()
 
+
+
 class EmployeeManager(models.Manager):
     def employee_validator(self, form_data):
         errors = {}
@@ -87,12 +88,7 @@ class EmployeeManager(models.Manager):
             errors['first_name'] = "First Name is not long enough. Try again!"
         if len(form_data['last_name']) < 2:
             errors['last_name'] = "Last Name is not long enough. Try again!"
-        if len(form_data['password']) < 8:
-            errors['password'] = "Password is not long enough, try again!"
-        if form_data['password'] != form_data['confirm_password']:
-            errors['confirm_password'] = "Passwords don't match! Try again!"
         return errors
-
 
 class Employee(models.Model):
     first_name=models.CharField(max_length=50)
@@ -109,6 +105,9 @@ class Employee(models.Model):
             'is_active',
         )
 
+    def __str__(self):
+        return(self.last_name + ', ' + self.first_name)
+
 
 class ClockSystemManager(models.Manager):
     def clockSystem_validator(self, form_data):
@@ -116,8 +115,6 @@ class ClockSystemManager(models.Manager):
         if len(form_data['employee']) <= 0:
             errors['employee'] = "No employee was selected, try again"
         return errors
-
-class ClockSystemManager(models.Manager):
     def clockin_validator(self, form_data):
         errors = {}
         if len(form_data['comment']) == 1:
@@ -129,15 +126,15 @@ class ClockSystemManager(models.Manager):
             errors['comment'] = "Please be descriptive if there is an issue."
         return errors
 
-
 class ClockSystem(models.Model):
     employee=models.ForeignKey(Employee, related_name="clockSystem", on_delete=models.CASCADE)
     location=models.CharField(max_length=60, null=True)
     role=models.CharField(max_length=80, null=True)
-    hours_worked=models.IntegerField(default=0, null=True)
-    minutes=models.IntegerField(default=0, null=True)
-    comment=models.TextField(null=True)
-    date_worked=models.DateField(null=True)
+    time_worked=models.CharField(max_length=255, null=True)
+    in_comment=models.TextField(null=True)
+    out_comment=models.TextField(null=True)
+    date_in=models.DateField(null=True)
+    date_out=models.DateField(null=True)
     clocked_in_at=models.TimeField()
     clocked_out_at=models.TimeField(null=True)
     objects=ClockSystemManager()
@@ -146,16 +143,15 @@ class ClockSystem(models.Model):
 
     class Meta:
         ordering = (
+            'date_in',
+            'date_out',
+            'clocked_in_at',
+            'clocked_out_at',
             'employee',
             'location',
             'role',
-            'hours_worked',
-            'comment',
-            'date_worked',
-            'clocked_in_at',
-            'clocked_out_at'
+            'time_worked',
+            'in_comment',
+            'out_comment',
         )
-
-    def __str__(self):
-        return self.employee
 

@@ -13,7 +13,7 @@
 <body>
     <a href="/create-user" class="btn btn-secondary m-2">Create User</a>
     <div class="sign-in-page text-center">
-        <h3 class="m-5">MN Made Time Clock - Log In</h3>
+        <img src={% static '../static/images/mnmade-logo1.png' %} alt="MN Made Hockey" />
         <div class="row">
             <div class="col-sm-6 col-lg-6">
                 <form class="employee-form text-center m-5" method="POST" action="/login">
@@ -24,7 +24,7 @@
                     <input class="form-control" type="password" name="password" placeholder="password" />
                     <input type="hidden" name="user_id" value="user.id">
                     <br>
-                    <input type="submit" class="btn btn-primary employee-login-blk" />
+                    <input type="submit" class="btn btn-success" />
                 </form>
             </div>
             <div class="col-sm-6 col-lg-6">

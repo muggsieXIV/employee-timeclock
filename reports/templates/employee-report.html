@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MN Made - Employee Dashboard</title>
+        {% load static %}
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <Link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    </head>
+    <body>
+        <div class="reports">
+            <!-- 
+            ==================
+            NAVIGATION SECTION
+            ================== 
+            -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <a class="navbar-brand" href="#">Navbar</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-item nav-link active" href="/dashboard">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-item nav-link" href="/reports">Reports</a>
+                        <a class="nav-item nav-link" href="/admin">Admin</a>
+                        <a class="nav-item nav-link" href="/logout">Logout</a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container mt-5">
+                <div class="report-filter">
+                    <form class="report-filter" action="/reports">
+                        {% csrf_token %}
+                        <label for="employee">Employee</label>
+                        <select class="" name="employee">
+                            <option value="all">All</option>
+                            {% for employee in all_employees %}
+                                <option value="{{employee.id}}">{{employee.last_name}}, {{employee.first_name}}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="start_date">Start Date: </label>
+                        <input type="date" name="start_date" value="start_date" />
+                        <label for="end_date">End Date: </label>
+                        <input type="date" name="end_date" value="end_date" />
+                        <button class="btn btn-success" type="submit" name="submit" value="filter">Filter</button>
+                        <button class="btn btn-warning" type="submit" name="submit" value="report">Create Full Report</button>
+
+                    </form>
+                </div>
+            </div>
+            <h1 class="m-5">{{ e.last_name }}, {{ e.first_name }}</h1>
+            <section class="totals m-5">
+                <h3>Totals</h3>
+                <table class="table m-2">
+                    <thead>
+                        <th>Days Worked</th>
+                        <th>Total Hours</th>
+                    </thead>
+                    <tbody>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    <tbody>
+                </table>
+            </section>
+
+            <section class="data-sec m-5">
+                <h3>All Records</h3>
+                <table class="table m-2">
+                    <thead>
+                        <th>ID</th>
+                        <th>Date In</th>
+                        <th>Time In</th>
+                        <th>Date Out</th>
+                        <th>Time Out</th>
+                        <th>Time Worked</th>
+                        <th>In Comment</th>
+                        <th>Out Comment</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                    </thead>
+                    <tbody>
+
+                        {% for res in all_clockins %}
+                            <tr>
+                                <td>{{ res.id }}</td>
+                                <td>{{ res.date_in}}</td>
+                                <td>{{ res.clocked_in_at }}
+                                <td>{{ res.date_out }}</td>
+                                <td>{{ res.clocked_out_at }}</td>
+                                <td>{{ res.time_worked }}</td>
+                                <td>{{ res.in_comment }}</td>
+                                <td>{{ res.out_comment }}</td>
+                                <td>{{ res.created_at }}</td>
+                                <td>{{ res.updated_at }}</td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+
+
+            </section>
+            
+
+
+        </div>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="{% static 'js/script.js' %}"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </body>
+</html>
