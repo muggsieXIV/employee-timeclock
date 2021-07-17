@@ -33,22 +33,14 @@
 
             <div class="container mt-5">
                 <div class="report-filter">
-                    <form class="report-filter" action="/reports">
+                    <form class="form" action="/reports/{{e.id}}/process_report" method="POST">
                         {% csrf_token %}
-                        <label for="employee">Employee</label>
-                        <select class="" name="employee">
-                            <option value="all">All</option>
-                            {% for employee in all_employees %}
-                                <option value="{{employee.id}}">{{employee.last_name}}, {{employee.first_name}}</option>
-                            {% endfor %}
-                        </select>
+                        <input type="hidden" name="employee_id" value="{{ e.id }}" />
                         <label for="start_date">Start Date: </label>
                         <input type="date" name="start_date" value="start_date" />
                         <label for="end_date">End Date: </label>
                         <input type="date" name="end_date" value="end_date" />
-                        <button class="btn btn-success" type="submit" name="submit" value="filter">Filter</button>
-                        <button class="btn btn-warning" type="submit" name="submit" value="report">Create Full Report</button>
-
+                        <button class="btn btn-success" type="submit">Create Report</button>
                     </form>
                 </div>
             </div>
@@ -57,12 +49,12 @@
                 <h3>Totals</h3>
                 <table class="table m-2">
                     <thead>
-                        <th>Days Worked</th>
+                        <th>Total Days Worked</th>
                         <th>Total Hours</th>
                     </thead>
                     <tbody>
-                        <td>N/A</td>
-                        <td>N/A</td>
+                        <td>Error: Failed to load</td>
+                        <td>{{ total_time_worked }}</td>
                     <tbody>
                 </table>
             </section>

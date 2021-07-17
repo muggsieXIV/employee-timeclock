@@ -12,8 +12,6 @@ def reports(request):
     context = {
             'all_employees': Employee.objects.all()
         }
-
-
     return render(request, 'reports.html', context)
 
 
@@ -23,47 +21,66 @@ def employee_report(request, employee_id):
 
     context = {
         'e': Employee.objects.get(id=employee_id),
-        'all_clockins': ClockSystem.objects.filter(employee=employee_id)
+        'all_clockins': ClockSystem.objects.filter(employee=employee_id),
+        'total_time_worked': "",
     }
 
     datetimeFormat = '%H:%M:%S'
-    sum = datetime.datetime.strptime('00:00:00', datetimeFormat)
 
+    # Getting time_worked for employee
+    timeList = []
     for data in context['all_clockins']:
-        print(data.time_worked)
-        
-        
+        timeList.append(data.time_worked)
 
-
-        
-
+    # Adding time worked for employee
+    totalSecs = 0
+    for tm in timeList:
+        timeParts = [int(s) for s in tm.split(':')]
+        totalSecs += (timeParts[0] * 60 + timeParts[1]) * 60 + timeParts[2]
+    totalSecs, sec = divmod(totalSecs, 60)
+    hr, min = divmod(totalSecs, 60)
+    total_time_worked = "%d:%02d:%02d" % (hr, min, sec)
+    # Testing this worked
+    print('Employee: ' + context['e'].last_name + ', ' + context['e'].first_name + ' - Total hours worked: ' + total_time_worked )
+    context['total_time_worked'] = total_time_worked
 
 
     return render(request, 'employee-report.html', context)
 
 
 
-#  c_in = last_login.clocked_in_at
-#             c_out = last_login.clocked_out_at
-#             d_in = last_login.date_in
-#             d_out = now.strftime("%Y-%m-%d")
+def process_report(request, employee_id):
+    if 'user_id' not in request.session:
+        return redirect('/')
 
-#             print('*** Finding hours worked...')
-#             print('In time: ' + str(c_in))
-#             print('Out Time: ' + str(c_out))
-#             print("Date in: " + str(d_in))
-#             print("Date out: " + str(d_out))
+    context = {
+        'e': Employee.objects.get(id=employee_id),
+        'all_clockins': ClockSystem.objects.filter(employee=employee_id),
+    }
 
-#             print(c_in)
-#             print(c_out)
-#             print(d_in)
-#             print(d_out)
-            
-#             datetime1_str = str(d_in) + ' ' + str(c_in)
-#             print(datetime1_str)
-#             datetime2_str = str(d_out) + ' ' + str(c_out)
-#             print(datetime2_str)
+    # Get clockins for date range
+    data = context['all_clockins'].objects.filter(date__range=[request.POST['start_date'], request.POST['end_date']])
 
-#             datetimeFormat = '%Y-%m-%d %H:%M:%S'
-#             diff = datetime.datetime.strptime(datetime2_str, datetimeFormat) - datetime.datetime.strptime(datetime1_str, datetimeFormat)
+    for d in data:
+        print(d)
 
+
+
+
+
+    # Get all clock ins from start to end date
+
+    
+    return redirect('/reports/{{employee_id}}/process_report/generated', context)
+
+
+
+def report_generated(request, employee_id):
+
+    return render(request, 'report.html')
+
+def process_all_report(request, employee_id):
+    pass
+
+def process_all_report_generated(request):
+    pass

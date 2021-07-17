@@ -9,7 +9,7 @@ const time = () => {
     const seconds = dateFns.format(now, 'ss');
 
     const html = `
-    <div>${date}</div>
+    <div class="date">${date}</div>
     <div class="time">
         <span>${hours}</span> :
         <span>${minutes}</span> :

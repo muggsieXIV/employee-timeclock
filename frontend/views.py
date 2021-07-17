@@ -161,7 +161,6 @@ def process_clock(request):
     # if clocking in
     if request.POST['clocksys'] == "clockin":
 
-        print("Clock in initiated for: " + e.last_name + ', ' + e.first_name)
 
         if e.is_active == True:
             # message.error(request, 'failed: ' + e.last_name + ', ' + e.first_name  + ' is already clocked in')
@@ -175,10 +174,9 @@ def process_clock(request):
             clocked_in_at=now.strftime("%H:%M:%S")
         )
         
-        print('Updating Employee Status...')
         e.is_active = True
 
-        print('Checking Employee Status...')
+        print('Checking Employee Status...' )
         if e.is_active == False:
             print('Failed to update Employee active status')
         if e.is_active == True:
