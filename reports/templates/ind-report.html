@@ -50,7 +50,9 @@
                     </form>
                 </div> {% endcomment %}
             </div>
-            <h1 class="m-5"> Test {{ e.last_name }}, {{ e.first_name }}</h1>
+            <div class="row m-5 text-center">
+                <h1>Report for: {{ e.last_name }}, {{ e.first_name }} <span><h4>from: {{ start_date }} to: {{ end_date }}</h4></span></h1>
+            </div>
             <section class="totals m-5">
                 <h3>Totals</h3>
                 <table class="table m-2">
@@ -59,7 +61,7 @@
                         <th>Total Hours</th>
                     </thead>
                     <tbody>
-                        <td>Error: Failed to load</td>
+                        <td>{{ days_worked }}</td>
                         <td>{{ total_time_worked }}</td>
                     <tbody>
                 </table>
@@ -82,18 +84,18 @@
                     </thead>
                     <tbody>
 
-                        {% for res in all_clockins %}
+                        {% for data in res %}
                             <tr>
-                                <td>{{ res.id }}</td>
-                                <td>{{ res.date_in}}</td>
-                                <td>{{ res.clocked_in_at }}
-                                <td>{{ res.date_out }}</td>
-                                <td>{{ res.clocked_out_at }}</td>
-                                <td>{{ res.time_worked }}</td>
-                                <td>{{ res.in_comment }}</td>
-                                <td>{{ res.out_comment }}</td>
-                                <td>{{ res.created_at }}</td>
-                                <td>{{ res.updated_at }}</td>
+                                <td>{{ data.id }}</td>
+                                <td>{{ data.date_in}}</td>
+                                <td>{{ data.clocked_in_at }}
+                                <td>{{ data.date_out }}</td>
+                                <td>{{ data.clocked_out_at }}</td>
+                                <td>{{ data.time_worked }}</td>
+                                <td>{{ data.in_comment }}</td>
+                                <td>{{ data.out_comment }}</td>
+                                <td>{{ data.created_at }}</td>
+                                <td>{{ data.updated_at }}</td>
                             </tr>
                         {% endfor %}
                         

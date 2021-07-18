@@ -3,6 +3,12 @@
     padding: 0px;
 }
 
+.navbar-img {
+    display: inline-block;
+    height: 20px;
+    width: auto;
+}
+
 .dashboard{
     background-size: cover;
     background-position: center center;
