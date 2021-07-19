@@ -128,11 +128,11 @@ class ClockSystemManager(models.Manager):
 
 class ClockSystem(models.Model):
     employee=models.ForeignKey(Employee, related_name="clockSystem", on_delete=models.CASCADE)
-    location=models.CharField(max_length=60, null=True)
-    role=models.CharField(max_length=80, null=True)
+    location=models.CharField(max_length=60, null=True, default="**Not Provided")
+    role=models.CharField(max_length=80, null=True, default="**Not Provided")
     time_worked=models.CharField(max_length=255, null=True)
-    in_comment=models.TextField(null=True)
-    out_comment=models.TextField(null=True)
+    in_comment=models.TextField(null=True, default="**None")
+    out_comment=models.TextField(null=True, default="**None")
     date_in=models.DateField(null=True)
     date_out=models.DateField(null=True)
     clocked_in_at=models.TimeField()
@@ -143,11 +143,11 @@ class ClockSystem(models.Model):
 
     class Meta:
         ordering = (
+            'employee',
             'date_in',
             'date_out',
             'clocked_in_at',
             'clocked_out_at',
-            'employee',
             'location',
             'role',
             'time_worked',

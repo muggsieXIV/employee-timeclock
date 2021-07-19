@@ -30,18 +30,7 @@
                     </div>
                 </div>
             </nav>
-            <div class="container mt-5">
-                <div class="report-filter">
-                    <form class="form" action="/reports/all/process-report" method="POST">
-                        {% csrf_token %}
-                        <label for="start_date">Start Date: </label>
-                        <input type="date" name="start_date" />
-                        <label for="end_date">End Date: </label>
-                        <input type="date" name="end_date" />
-                        <button class="btn btn-success" type="submit">Create Report</button>
-                    </form>
-                </div>
-            </div>
+            <h1 class="ml-5">Employee Report for: <span><h4>{{ start_date }} - {{ end_date }}</h4></span></h1>
 
             <section class="data-sec m-5">
                 <table class="table">
@@ -49,19 +38,21 @@
                         <th>ID</th>
                         <th>Last Name</th>
                         <th>First Name</th>
+                        <th>Total Shifts Worked</th>
                         <th>Total Hours Worked</th>
                         <th></th>
                         <thr></th>
                     </thead>
                     <tbody>
 
-                        {% for employee in all_employees %}
+                        {% for data in res %}
                             <tr>
-                                <td>{{ employee.id }}</td>
-                                <td>{{ employee.last_name }}</td>
-                                <td>{{ employee.first_name }}</td>
-                                <td>{{ total_time_worked }}<td>
-                                <td><a href="/reports/{{employee.id}}" class="btn btn-warning">Report</a></td>
+                                <td>{{ data.id }}</td>
+                                <td>{{ data.last_name }}</td>
+                                <td>{{ data.first_name }}</td>
+                                <td>{{ data.days_worked }}</td>
+                                <td>{{ data.total_time_worked }}<td>
+                                <td><a href="/reports/{{data.id}}" class="btn btn-warning">Report</a></td>
                             </tr>
                         {% endfor %}
                         
