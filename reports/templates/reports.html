@@ -49,19 +49,21 @@
                         <th>ID</th>
                         <th>Last Name</th>
                         <th>First Name</th>
+                        <th>Total Shifts</th>
                         <th>Total Hours Worked</th>
                         <th></th>
                         <thr></th>
                     </thead>
                     <tbody>
 
-                        {% for employee in all_employees %}
+                        {% for data in res %}
                             <tr>
-                                <td>{{ employee.id }}</td>
-                                <td>{{ employee.last_name }}</td>
-                                <td>{{ employee.first_name }}</td>
-                                <td>{{ total_time_worked }}<td>
-                                <td><a href="/reports/{{employee.id}}" class="btn btn-warning">Report</a></td>
+                                <td>{{ data.id }}</td>
+                                <td>{{ data.last_name }}</td>
+                                <td>{{ data.first_name }}</td>
+                                <td>{{ data.days_worked }}</td>
+                                <td>{{ data.total_time_worked }}<td>
+                                <td><a href="/reports/{{ data.id }}" class="btn btn-warning">Report</a></td>
                             </tr>
                         {% endfor %}
                         

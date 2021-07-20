@@ -33,7 +33,7 @@
 
             <div class="container mt-5">
                 <div class="report-filter">
-                    <form class="form" action="/reports/{{ e.id }}/process_report" method="POST">
+                    <form class="form" action="/reports/{{ e.id }}/process-report" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="employee_id" value="{{ e.id }}" />
                         <label for="start_date">Start Date: </label>

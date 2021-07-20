@@ -1,4 +1,5 @@
-from django.db import DefaultConnectionProxy
+import csv
+from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from frontend.models import Employee, ClockSystem
@@ -10,10 +11,47 @@ from django.utils.dateparse import parse_date
 def reports(request):
     if 'user_id' not in request.session:
         return redirect('/')
+
     context = {
-            'all_employees': Employee.objects.all()
+        'all_employees': Employee.objects.all(),
+        'res': [],
+    }
+    # Get Employee -> Get Employee Clockins filtered by start/end dates...
+    all_employees = context['all_employees']
+    for employee in all_employees:
+        qued_clock_ins = []
+        days_worked = ""
+        time_worked = ""
+        # getting all clock-ins for set dates
+        # print(str(employee.id) + " employeeID")
+        qued_clock_ins = ClockSystem.objects.filter(employee=employee.id)
+
+        # Get Time Worked for Employee
+        time_list = []
+        for data in qued_clock_ins:
+            time_list.append(data.time_worked)
+        totalSecs = 0
+        for tm in time_list:
+            timeParts = [int(s) for s in tm.split(':')]
+            totalSecs += (timeParts[0] * 60 + timeParts[1]) * 60 + timeParts[2]
+        totalSecs, sec = divmod(totalSecs, 60)
+        hr, min = divmod(totalSecs, 60)
+        total_time_worked = "%d:%02d:%02d" % (hr, min, sec)
+
+        # Get Days Worked for Employee
+        days_worked = len(qued_clock_ins)
+
+        # Exporting Employee data to frontend
+        employee_data = {
+            'id': employee.id, 
+            'last_name': employee.last_name, 
+            'first_name': employee.first_name, 
+            'days_worked': days_worked, 
+            'total_time_worked': total_time_worked,
+            'all_clock_ins': qued_clock_ins,
         }
-        
+        context['res'].append(employee_data)
+
     return render(request, 'reports.html', context)
 
 
@@ -103,10 +141,6 @@ def process_report(request, employee_id):
     return render(request, 'ind-report.html', context)
 
 
-
-def report_generated(request, employee_id):
-    pass
-
 def process_all_report(request):
     if 'user_id' not in request.session:
         return redirect('/')
@@ -145,7 +179,6 @@ def process_all_report(request):
                     clock_ins.append(data)
 
         days_worked = str(len(clock_ins))
-        print(days_worked + '__________')
 
 
         datetimeFormat = '%H:%M:%S'
@@ -171,31 +204,19 @@ def process_all_report(request):
         }
 
         context['res'].append(employee_data)
-        print(context['res'])
 
-
-        print('')
-        print('********')
-        print(' ')
-
-            # if len(employee_data_set) <= 0:
-            #     print(employee.last_name + ', ' + employee.first_name + ' - Has no records')
-            # else:
-                
-
-            #     print('Employee: ' + str(employee.id) + ', ' + employee.last_name + ', ' + employee.first_name + ' data: ')
-            #     print(employee_data_set)
-            #     days_worked = len(employee_data_set)
-            #     print('days worked: ' + str(days_worked))
-            #     print('*****Employee Data Collected...PASS*****')
-            #     print('*****Parsing Employees clock in/outs...PASS*****')
-            #     print('*****Generating Employee Report...WAITING*****')
-            #     print('*****Generating Full Report...WAITING*****')
-            #     print(" ")
-            #     print(" ")
 
     return render(request, 'all-report.html', context)
 
 
-def process_all_report_generated(request):
+def process_all_pdf(request):
+    # Create PDF document
+    # Populate document with form data -> all clockins for all employees inside date range
+    # display all Clock in Data for the range, order by employee's last naem
+    pass
+
+def process_employee_pdf(request):
+    # Create PDF document
+    # Populate document with form data -> all clockins for all employees inside date range
+    # Only generate report for one employee
     pass
