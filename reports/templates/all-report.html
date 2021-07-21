@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>MN Made - Employee Dashboard</title>
+        <title>MN Made - All Employees Report</title>
         {% load static %}
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -17,7 +17,7 @@
             ================== 
             -->
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <a class="navbar-brand" href="#">Navbar</a>
+                <a class="navbar-brand" href="#">MN MADE</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -30,9 +30,12 @@
                     </div>
                 </div>
             </nav>
+            <div class="row">
+                <a href="/reports/{{ e.id }}" class="btn btn-warning ml-5 mt-1">Back</a>
+            </div>
             <div class="row mt-2">
                 <div class="col-sm-4 col-lg-4">
-                    <h1 class="ml-5">Employee Overview for: <span><h4>{{ start_date }} - {{ end_date }}</h4></span></h1>
+                    <h1 class="ml-5">Report for: <span><h4 class="text-red">{{ start_date }} to {{ end_date }}</h4></span></h1>
                 </div>
                 <div class="col-sm-6 col-lg-6"></div>
                 <div class="col-sm-2 col-lg-2">
@@ -52,8 +55,9 @@
                         <th>ID</th>
                         <th>Last Name</th>
                         <th>First Name</th>
-                        <th>Total Shifts Worked</th>
-                        <th>Total Hours Worked</th>
+                        <th>Total Shifts</th>
+                        <th>Total Hours</th>
+                        
                         <th></th>
                         <thr></th>
                     </thead>

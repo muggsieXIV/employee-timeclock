@@ -16,12 +16,14 @@ def reports(request):
         'all_employees': Employee.objects.all(),
         'res': [],
     }
+
+    now = datetime.datetime.now()
+
     # Get Employee -> Get Employee Clockins filtered by start/end dates...
     all_employees = context['all_employees']
     for employee in all_employees:
         qued_clock_ins = []
         days_worked = ""
-        time_worked = ""
         # getting all clock-ins for set dates
         # print(str(employee.id) + " employeeID")
         qued_clock_ins = ClockSystem.objects.filter(employee=employee.id)
@@ -29,7 +31,17 @@ def reports(request):
         # Get Time Worked for Employee
         time_list = []
         for data in qued_clock_ins:
-            time_list.append(data.time_worked)
+            if not data.date_out:
+                time_out = now.strftime("%H:%M:%S")
+
+                dt_1 = str(data.date_in) + ' ' + str(data.clocked_in_at)
+                dt_2 = str(now.strftime("%Y-%m-%d")) + ' ' + str(now.strftime("%H:%M:%S"))
+                datetimeFormat = '%Y-%m-%d %H:%M:%S'
+                diff = datetime.datetime.strptime(dt_2, datetimeFormat) - datetime.datetime.strptime(dt_1, datetimeFormat)
+                time_list.append(str(diff))
+            else:
+                time_list.append(data.time_worked)
+
         totalSecs = 0
         for tm in time_list:
             timeParts = [int(s) for s in tm.split(':')]
@@ -64,11 +76,23 @@ def employee_report(request, employee_id):
         'total_time_worked': "",
         'days_worked': ""
     }
+    now = datetime.datetime.now()
     datetimeFormat = '%H:%M:%S'
     # Getting time_worked for employee
     timeList = []
+
+
     for data in context['all_clockins']:
-        timeList.append(data.time_worked)
+
+        if not data.date_out:
+            time_out = now.strftime("%H:%M:%S")
+            dt_1 = str(data.date_in) + ' ' + str(data.clocked_in_at)
+            dt_2 = str(now.strftime("%Y-%m-%d")) + ' ' + str(now.strftime("%H:%M:%S"))
+            datetimeFormat = '%Y-%m-%d %H:%M:%S'
+            diff = datetime.datetime.strptime(dt_2, datetimeFormat) - datetime.datetime.strptime(dt_1, datetimeFormat)
+            timeList.append(str(diff))
+        else:
+            timeList.append(data.time_worked)
     # Adding time worked for employee
     totalSecs = 0
     for tm in timeList:
@@ -83,7 +107,6 @@ def employee_report(request, employee_id):
     context['days_worked'] = days_worked
 
     return render(request, 'employee-report.html', context)
-
 
 
 def process_report(request, employee_id):
@@ -123,11 +146,23 @@ def process_report(request, employee_id):
     context['days_worked'] = days_worked
 
     # Get Total Time worked
+    now = datetime.datetime.now()
     datetimeFormat = '%H:%M:%S'
     # Getting time_worked for employee
     time_list = []
     for data in res:
-        time_list.append(data.time_worked)
+        if not data.date_out:
+            time_out = now.strftime("%H:%M:%S")
+            dt_1 = str(data.date_in) + ' ' + str(data.clocked_in_at)
+            dt_2 = str(now.strftime("%Y-%m-%d")) + ' ' + str(now.strftime("%H:%M:%S"))
+            datetimeFormat = '%Y-%m-%d %H:%M:%S'
+            diff = datetime.datetime.strptime(dt_2, datetimeFormat) - datetime.datetime.strptime(dt_1, datetimeFormat)
+            time_list.append(str(diff))
+            data.date_out = now.strftime("%Y-%m-%d")
+            data.clocked_out_at = str(time_out)
+            data.time_worked = str(diff)
+        else:
+            time_list.append(data.time_worked)
     # Adding time worked for employee
     totalSecs = 0
     for tm in time_list:
@@ -180,12 +215,20 @@ def process_all_report(request):
 
         days_worked = str(len(clock_ins))
 
-
+        now = datetime.datetime.now()
         datetimeFormat = '%H:%M:%S'
         time_list = []
         # getting time_worked
         for data in clock_ins:
-            time_list.append(data.time_worked)
+            if not data.date_out:
+                time_out = now.strftime("%H:%M:%S")
+                dt_1 = str(data.date_in) + ' ' + str(data.clocked_in_at)
+                dt_2 = str(now.strftime("%Y-%m-%d")) + ' ' + str(now.strftime("%H:%M:%S"))
+                dtf = '%Y-%m-%d %H:%M:%S'
+                diff = datetime.datetime.strptime(dt_2, dtf) - datetime.datetime.strptime(dt_1, dtf)
+                time_list.append(str(diff))
+            else:
+                time_list.append(data.time_worked)
         totalSecs = 0
         for tm in time_list:
             timeParts = [int(s) for s in tm.split(':')]

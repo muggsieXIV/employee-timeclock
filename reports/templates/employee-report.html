@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>MN Made - Employee Full Report</title>
+        <title>MN MADE - Full Report: {{ e.last_name }}, {{ e.first_name }}</title>
         {% load static %}
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -30,7 +30,10 @@
                     </div>
                 </div>
             </nav>
-
+            <div class="row">
+                <a href="/reports" class="btn btn-warning ml-5 mt-1">Back</a>
+            </div>
+            <h1 class="m-5">{{ e.last_name }}, {{ e.first_name }}</h1>
             <div class="container mt-5">
                 <div class="report-filter">
                     <form class="form" action="/reports/{{ e.id }}/process-report" method="POST">
@@ -44,12 +47,11 @@
                     </form>
                 </div>
             </div>
-            <h1 class="m-5">{{ e.last_name }}, {{ e.first_name }}</h1>
             <section class="totals m-5">
                 <h3>Totals</h3>
                 <table class="table m-2">
                     <thead>
-                        <th>Total Days Worked</th>
+                        <th>Total Shifts</th>
                         <th>Total Hours</th>
                     </thead>
                     <tbody>
@@ -58,7 +60,6 @@
                     <tbody>
                 </table>
             </section>
-
             <section class="data-sec m-5">
                 <h3>All Records</h3>
                 <table class="table m-2">
@@ -77,8 +78,6 @@
                         <th>Updated At</th>
                     </thead>
                     <tbody>
-                    
-
                         {% for res in all_clockins %}
                             <tr>
                                 <td>{{ res.id }}</td>
@@ -95,15 +94,9 @@
                                 <td>{{ res.updated_at }}</td>
                             </tr>
                         {% endfor %}
-                        
                     </tbody>
                 </table>
-
-
             </section>
-            
-
-
         </div>
         <!-- Latest compiled and minified JavaScript -->
         <script src="{% static 'js/script.js' %}"></script>
