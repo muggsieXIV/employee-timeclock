@@ -1,11 +1,7 @@
-import csv
-from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from frontend.models import Employee, ClockSystem
 import datetime
-from django.utils.dateparse import parse_date
-
 
 # Create your views here.
 def reports(request):

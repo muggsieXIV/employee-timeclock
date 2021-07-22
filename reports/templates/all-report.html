@@ -39,13 +39,14 @@
                 </div>
                 <div class="col-sm-6 col-lg-6"></div>
                 <div class="col-sm-2 col-lg-2">
-                    <form action="/reports/all/process-report/pdf-print" method="POST">
+                    <a href="/reports/all/process-report/pdf-print" class="btn btn-secondary">Print Report</a>
+                    {% comment %} <form action="/reports/all/process-report/pdf-print" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="start_date" value={{ start_date }} />
                         <input type="hidden" name="end_date" value={{ end_date }} />
                         <input type="hidden" name="query_set" value={{ res }} />
                         <button name="submit" type="submit" class="btn btn-secondary">Print Full Report</button>
-                    </form>
+                    </form> {% endcomment %}
                 </div>
             </div>
 
