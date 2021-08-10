@@ -94,6 +94,8 @@ class Employee(models.Model):
     first_name=models.CharField(max_length=50)
     last_name=models.CharField(max_length=50)
     is_active=models.BooleanField(default=False)
+    location=models.CharField(max_length=255, default="Not Provided")
+    role=models.CharField(max_length=255, default="Not Provide")
     objects=EmployeeManager()
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
@@ -103,6 +105,8 @@ class Employee(models.Model):
             'last_name',
             'first_name',
             'is_active',
+            'location',
+            'role'
         )
 
     def __str__(self):

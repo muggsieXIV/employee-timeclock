@@ -29,7 +29,6 @@ def reports(request):
         for data in qued_clock_ins:
             if not data.date_out:
                 time_out = now.strftime("%H:%M:%S")
-
                 dt_1 = str(data.date_in) + ' ' + str(data.clocked_in_at)
                 dt_2 = str(now.strftime("%Y-%m-%d")) + ' ' + str(now.strftime("%H:%M:%S"))
                 datetimeFormat = '%Y-%m-%d %H:%M:%S'
@@ -172,6 +171,7 @@ def process_report(request, employee_id):
     return render(request, 'ind-report.html', context)
 
 
+# Creates report for all employees during date range
 def process_all_report(request):
     if 'user_id' not in request.session:
         return redirect('/')
@@ -181,11 +181,14 @@ def process_all_report(request):
         'start_date': request.POST['start_date'],
         'end_date': request.POST['end_date'],
         'res': [],
+        'rec': []
     }
 
     # Get the set start/end dates for date
     start_date = str(context['start_date'])
     end_date = str(context['end_date'])
+    rec = []
+    context['rec'] = rec
 
     # Get Employee -> Get Employee Clockins filtered by start/end dates...
     all_employees = context['all_employees']
@@ -196,8 +199,21 @@ def process_all_report(request):
         # getting all clock-ins for set dates
         # print(str(employee.id) + " employeeID")
         qued_clock_ins = ClockSystem.objects.filter(employee=employee.id)
+
         clock_ins = []
         for data in qued_clock_ins:
+            record = {
+                'id': data.id,
+                'employee': data.employee,
+                'date_in': data.date_in, 
+                'date_out': data.date_out, 
+                'time_in': data.clocked_in_at, 
+                'time_out': data.clocked_out_at, 
+                'time_worked': data.time_worked, 
+                'in_comment': data.in_comment, 
+                'out_comment': data.out_comment
+            }
+            rec.append(record)
             # setting string dates to datetime for evaluation
             s = datetime.datetime.strptime(start_date, "%Y-%m-%d")
             e = datetime.datetime.strptime(end_date, "%Y-%m-%d")
@@ -251,7 +267,7 @@ def process_all_report(request):
 def process_all_pdf(request):
     # Create PDF document
     # Populate document with form data -> all clockins for all employees inside date range
-    # display all Clock in Data for the range, order by employee's last naem
+    # display all Clock in Data for the range, order by employee's last name
     pass
 
 def process_employee_pdf(request):
@@ -259,3 +275,4 @@ def process_employee_pdf(request):
     # Populate document with form data -> all clockins for all employees inside date range
     # Only generate report for one employee
     pass
+

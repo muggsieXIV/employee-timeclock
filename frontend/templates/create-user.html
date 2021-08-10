@@ -37,14 +37,17 @@
                     <p>amyw@minnesotamadehockey.com</p>
                     <p>+1 (952) 210-0831</p>
                 </div>
-                <div class="container error-msg-block">
-                    <div class="container pl-5 mt-5">
-                        <div class="container text-left">
-                            {% for message in messages %}
-                                {{ message }}<br>
-                            {% endfor %}
-                        </div>
-                    </div>
+            </div>
+        </div>
+        <div class="container error-msg-block">
+            <div class="container pl-5 mt-5">
+                <div class="container text-left">
+                    {% if messages %}
+                        <h3>Error(s):</h3>
+                        {% for message in messages %}
+                            <h4>{{ message }}</h4><br>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>

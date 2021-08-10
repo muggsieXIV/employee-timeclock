@@ -44,11 +44,10 @@
                 <!-- LOGO SECTION-->
                 <img src={% static  '../static/images/mnmade-logo1.png' %} class="mn-made-logo" alt="Minnesota Made Hockey" />
             </div>
-
+            <br></br>
             <section class="clock-in-out-system">
                 <!-- CLOCK -->
                 <div class="clock"></div>
-
                 <!-- employee form -->
                 <div class="employee-form">
                     <form method="POST" action="/process-clock">
@@ -68,20 +67,28 @@
                             <button class="btn btn-success" type="submit" value="clockin" name="clocksys">Clock In</button>
                             <button class="btn btn-danger" type="submit" value="clockout" name="clocksys">Clock Out</button>
                         </div>
-                        {% if messages %}
-                            <ul>
-                                {% for message in messages %}
-                                    <li>{{ message }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
                     </form>
                 </div>
             </section>
+            <br></br>
+            <div>
+                <h5>If you have issues TEXT Amy Walker</h5>
+                <h5><a href="" class="">952-210-0831</h5>
+            </div>
+            <div class="container error-msg-block text-center">
+            <div class="container pl-5 mt-5 text-center">
+                <div class="container text-center">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <h4 class="text-center">{{ message }}</h4><br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
         </div>
         <br>
         
-        <p></p>
         
     </div>
     <!-- Latest compiled and minified JavaScript -->

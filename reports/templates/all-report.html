@@ -35,22 +35,18 @@
             </div>
             <div class="row mt-2">
                 <div class="col-sm-4 col-lg-4">
-                    <h1 class="ml-5">Report for: <span><h4 class="text-red">{{ start_date }} to {{ end_date }}</h4></span></h1>
+                    <h1 class="ml-5">Full Report For: <span><h4 class="text-red">{{ start_date }} to {{ end_date }}</h4></span></h1>
                 </div>
                 <div class="col-sm-6 col-lg-6"></div>
                 <div class="col-sm-2 col-lg-2">
-                    <a href="/reports/all/process-report/pdf-print" class="btn btn-secondary">Print Report</a>
-                    {% comment %} <form action="/reports/all/process-report/pdf-print" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="start_date" value={{ start_date }} />
-                        <input type="hidden" name="end_date" value={{ end_date }} />
-                        <input type="hidden" name="query_set" value={{ res }} />
-                        <button name="submit" type="submit" class="btn btn-secondary">Print Full Report</button>
-                    </form> {% endcomment %}
+                    <form action="/reports/all/process-report/pdf-print" method="POST">
+                        <input type="button" value="Print Report" onclick="window.print()" class="btn btn-secondary" />
+                    </form> 
                 </div>
             </div>
-
+            
             <section class="data-sec m-5">
+                <h3>Totals</h3>
                 <table class="table">
                     <thead>
                         <th>ID</th>
@@ -58,31 +54,55 @@
                         <th>First Name</th>
                         <th>Total Shifts</th>
                         <th>Total Hours</th>
-                        
-                        <th></th>
-                        <thr></th>
+                        <th> </th>
+                        <thr> </th>
                     </thead>
                     <tbody>
-
                         {% for data in res %}
                             <tr>
                                 <td>{{ data.id }}</td>
                                 <td>{{ data.last_name }}</td>
                                 <td>{{ data.first_name }}</td>
                                 <td>{{ data.days_worked }}</td>
-                                <td>{{ data.total_time_worked }}<td>
-                                <td><a href="/reports/{{data.id}}" class="btn btn-warning">Report</a></td>
+                                <td>{{ data.total_time_worked }}</td>
+                                <td><a href="/reports/{{data.id}}" class="btn btn-warning">Individual Reports</a></td>
                             </tr>
                         {% endfor %}
-                        
                     </tbody>
                 </table>
-
-
             </section>
             
-
-
+            <section class="data-sec m-5">
+                <h3>Records</h3>
+                <table class="table">
+                    <thead>
+                        <th>ID</th>
+                        <th>Employee</th>
+                        <th>Date In</th>
+                        <th>Date Out</th>
+                        <th>Time In</th>
+                        <th>Time Out</th>
+                        <th>Hours Worked</th>
+                        <th>In Comment</th>
+                        <th>Out Comment</th>
+                    </thead>
+                    <tbody>
+                        {% for data in rec %}
+                            <tr>
+                                <td>{{ data.id }}</td>
+                                <td>{{ data.employee }}</td>
+                                <td>{{ data.date_in }}</td>
+                                <td>{{ data.date_out }}</td>
+                                <td>{{ data.time_in }}</td>
+                                <td>{{ data.time_out }}</td>
+                                <td>{{ data.time_worked }}</td>
+                                <td>{{ data.in_comment }}</td>
+                                <td>{{ data.out_comment }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
         </div>
         <!-- Latest compiled and minified JavaScript -->
         <script src="{% static 'js/script.js' %}"></script>

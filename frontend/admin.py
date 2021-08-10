@@ -5,7 +5,7 @@ from .models import Employee, ClockSystem, User
 # Register your models here.
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'last_name', 'first_name', 'is_active', 'created_at', 'updated_at']
+    list_display = ['id', 'last_name', 'first_name', 'is_active', 'location', 'role', 'created_at', 'updated_at']
 
 @admin.register(ClockSystem)
 class ClockSystemAdmin(admin.ModelAdmin):
